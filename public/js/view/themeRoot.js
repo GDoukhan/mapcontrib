@@ -10,6 +10,7 @@ import 'leaflet.heat';
 import osmtogeojson from 'osmtogeojson';
 import OverPassLayer from 'leaflet-overpass-layer';
 import Omnivore from 'leaflet-omnivore';
+import 'leaflet.vectorgrid';
 import moment from 'moment-timezone';
 import DeviceHelper from 'helper/device';
 
@@ -491,6 +492,15 @@ export default Marionette.LayoutView.extend({
                 })
             );
         }
+
+        tileLayersGroup.addLayer(
+            L.VectorGrid.Protobuf('http://dev.osmose.openstreetmap.fr/fr/map/issues/{z}/{x}/{y}.mvt?item=xxxx&level=1', {
+                rendererFactory: L.canvas.tile,
+                attribution: 'Osmose',
+                minZoom: tile.minZoom,
+                maxZoom: tile.maxZoom,
+            })
+        );
 
         this._map.addLayer(tileLayersGroup);
 
