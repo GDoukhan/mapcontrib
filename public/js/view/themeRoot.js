@@ -493,14 +493,33 @@ export default Marionette.LayoutView.extend({
             );
         }
 
-        tileLayersGroup.addLayer(
-            L.vectorGrid.protobuf('http://dev.osmose.openstreetmap.fr/fr/map/issues/{z}/{x}/{y}.mvt?item=xxxx&level=1', {
-                rendererFactory: L.canvas.tile,
-                attribution: 'Osmose',
-                minZoom: tile.minZoom,
-                maxZoom: tile.maxZoom,
-            })
-        );
+        tileLayersGroup.addLayer(L.vectorGrid.protobuf('https://beta.osmose.openstreetmap.fr/fr/map/issues/{z}/{x}/{y}.mvt?item=8250&level=1,2,3', {
+            rendererFactory: L.canvas.tile,
+            attribution: 'Osmose',
+            minZoom: 0,
+            maxZoom: 20,
+            vectorTileLayerStyles: {
+                issues: properties => ({
+                    icon: L.icon({
+                        iconUrl: `https://beta.osmose.openstreetmap.fr/fr/images/markers/marker-b-${properties.item}.png`,
+                        iconSize: [
+                            17, 33,
+                        ],
+                        iconAnchor: [8, 33],
+                    }),
+                }),
+                limit: (properties) => {
+                    properties.limit = true;
+                    return {
+                        icon: L.icon({
+                            iconUrl: 'https://beta.osmose.openstreetmap.fr/fr/images/limit.png',
+                            iconSize: L.point(256, 256),
+                            iconAnchor: L.point(128, 128),
+                        }),
+                    };
+                },
+            },
+        }));
 
         this._map.addLayer(tileLayersGroup);
 
