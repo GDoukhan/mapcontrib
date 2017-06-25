@@ -494,7 +494,7 @@ export default Marionette.LayoutView.extend({
         }
 
         tileLayersGroup.addLayer(
-            L.VectorGrid.Protobuf('http://dev.osmose.openstreetmap.fr/fr/map/issues/{z}/{x}/{y}.mvt?item=xxxx&level=1', {
+            L.vectorGrid.protobuf('http://dev.osmose.openstreetmap.fr/fr/map/issues/{z}/{x}/{y}.mvt?item=xxxx&level=1', {
                 rendererFactory: L.canvas.tile,
                 attribution: 'Osmose',
                 minZoom: tile.minZoom,
