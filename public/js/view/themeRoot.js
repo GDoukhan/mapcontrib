@@ -493,33 +493,41 @@ export default Marionette.LayoutView.extend({
             );
         }
 
-        tileLayersGroup.addLayer(L.vectorGrid.protobuf('https://beta.osmose.openstreetmap.fr/fr/map/issues/{z}/{x}/{y}.mvt?item=8250&level=1,2,3', {
-            rendererFactory: L.canvas.tile,
-            attribution: 'Osmose',
-            minZoom: 0,
-            maxZoom: 20,
-            vectorTileLayerStyles: {
-                issues: properties => ({
-                    icon: L.icon({
-                        iconUrl: `https://beta.osmose.openstreetmap.fr/fr/images/markers/marker-b-${properties.item}.png`,
-                        iconSize: [
-                            17, 33,
-                        ],
-                        iconAnchor: [8, 33],
-                    }),
-                }),
-                limit: (properties) => {
-                    properties.limit = true;
-                    return {
+        // Osmose test start
+        const osmoseEndpoint = 'https://beta.osmose.openstreetmap.fr/fr';
+        const query = 'item=8250&level=1,2,3';
+
+        tileLayersGroup.addLayer(L.vectorGrid.protobuf(
+            `${osmoseEndpoint}/map/issues/{z}/{x}/{y}.mvt?${query}`,
+            {
+                rendererFactory: L.canvas.tile,
+                attribution: 'Osmose',
+                minZoom: 0,
+                maxZoom: 20,
+                vectorTileLayerStyles: {
+                    issues: properties => ({
                         icon: L.icon({
-                            iconUrl: 'https://beta.osmose.openstreetmap.fr/fr/images/limit.png',
-                            iconSize: L.point(256, 256),
-                            iconAnchor: L.point(128, 128),
+                            iconUrl: `${osmoseEndpoint}/images/markers/marker-b-${properties.item}.png`,
+                            iconSize: [
+                                17, 33,
+                            ],
+                            iconAnchor: [8, 33],
                         }),
-                    };
+                    }),
+                    limit: (properties) => {
+                        properties.limit = true;
+                        return {
+                            icon: L.icon({
+                                iconUrl: `${osmoseEndpoint}/images/limit.png`,
+                                iconSize: L.point(256, 256),
+                                iconAnchor: L.point(128, 128),
+                            }),
+                        };
+                    },
                 },
-            },
-        }));
+            }
+        ));
+        // Osmose test end
 
         this._map.addLayer(tileLayersGroup);
 
