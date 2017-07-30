@@ -495,9 +495,41 @@ export default Marionette.LayoutView.extend({
 
         // Osmose test start
         const osmoseEndpoint = 'https://beta.osmose.openstreetmap.fr/fr';
-        const query = 'item=8250&level=1,2,3';
 
-        tileLayersGroup.addLayer(L.vectorGrid.protobuf(
+        switch (this.model.get('fragment')) {
+            case '9cbc7f':
+                tileLayersGroup.addLayer(
+                    this._buildOsmoseVectorTile(osmoseEndpoint, 'item=8250')
+                );
+                break;
+            case '1dac40':
+                tileLayersGroup.addLayer(
+                    this._buildOsmoseVectorTile(osmoseEndpoint, 'item=8121')
+                );
+                break;
+            case 'c04ebc':
+                tileLayersGroup.addLayer(
+                    this._buildOsmoseVectorTile(osmoseEndpoint, 'item=8211')
+                );
+                break;
+            default:
+        }
+        // Osmose test end
+
+        this._map.addLayer(tileLayersGroup);
+
+        if ( this._currentTileLayer ) {
+            this._map.removeLayer( this._currentTileLayer );
+        }
+
+        this._currentTileId = newTileId;
+        this._currentTileLayer = tileLayersGroup;
+
+        this.updateMinDataZoom();
+    },
+
+    _buildOsmoseVectorTile(osmoseEndpoint, query) {
+        return L.vectorGrid.protobuf(
             `${osmoseEndpoint}/map/issues/{z}/{x}/{y}.mvt?${query}`,
             {
                 rendererFactory: L.canvas.tile,
@@ -526,19 +558,7 @@ export default Marionette.LayoutView.extend({
                     },
                 },
             }
-        ));
-        // Osmose test end
-
-        this._map.addLayer(tileLayersGroup);
-
-        if ( this._currentTileLayer ) {
-            this._map.removeLayer( this._currentTileLayer );
-        }
-
-        this._currentTileId = newTileId;
-        this._currentTileLayer = tileLayersGroup;
-
-        this.updateMinDataZoom();
+        );
     },
 
     updateOverPassRequest(layerModel) {
