@@ -4,6 +4,7 @@
         "classes": true
     },
     "plugins": [
+        "react",
         "import",
         "jest"
     ],
